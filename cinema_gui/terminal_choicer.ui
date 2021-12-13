@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>365</width>
+    <height>166</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"> background-color:  rgb(0, 255, 0);</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+	color:rgb(0, 0, 0);
+	font: 20px;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>Выберите тип терминала</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="user_terminal">
+       <property name="toolTip">
+        <string>Терминал, для покупки билетов на сеанс</string>
+       </property>
+       <property name="statusTip">
+        <string>Терминал, для покупки билетов на сеанс</string>
+       </property>
+       <property name="whatsThis">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color:  rgb(0, 0, 0);
+    border-style: outset;
+    border-width: 1px;
+    border-radius: 10px;
+    border-color:rgb(0, 255, 0);
+	color:rgb(0, 255, 0);
+}
+QPushButton:pressed {
+    background-color: rgb(0, 149, 0);
+    border-style: inset;
+}</string>
+       </property>
+       <property name="text">
+        <string>Пользовательский терминал</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="admin_terminal">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color:  rgb(0, 0, 0);
+    border-style: outset;
+    border-width: 1px;
+    border-radius: 10px;
+    border-color:rgb(0, 255, 0);
+	color:rgb(0, 255, 0);
+}
+QPushButton:pressed {
+    background-color: rgb(0, 149, 0);
+    border-style: inset;
+}</string>
+       </property>
+       <property name="text">
+        <string>Терминал администратора</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="extended_terminal">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color:  rgb(0, 0, 0);
+    border-style: outset;
+    border-width: 1px;
+    border-radius: 10px;
+    border-color:rgb(0, 255, 0);
+	color:rgb(0, 255, 0);
+}
+QPushButton:pressed {
+    background-color: rgb(0, 149, 0);
+    border-style: inset;
+}</string>
+       </property>
+       <property name="text">
+        <string>Дополненный терминал</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
