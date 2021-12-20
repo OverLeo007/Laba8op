@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>terminal_picker</class>
+ <widget class="QDialog" name="terminal_picker">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>238</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Выбор терминала</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="term_pick_label">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>Выберите терминал</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="user_terminal_button">
+       <property name="toolTip">
+        <string>Покупка билетов на сеанс</string>
+       </property>
+       <property name="text">
+        <string>Пользоватльский терминал</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="admin_terminal_button">
+       <property name="toolTip">
+        <string>Редактирование информации о сеансах</string>
+       </property>
+       <property name="text">
+        <string>Терминал администратора</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

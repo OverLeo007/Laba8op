@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AdminTerminal</class>
+ <widget class="QWidget" name="AdminTerminal">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>774</width>
+    <height>545</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Терминал администратора</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_5">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="tableLable">
+       <property name="text">
+        <string>Афиша на сегодня:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="sessionsTextBrowser"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="filmNameLabel">
+         <property name="text">
+          <string>Название фильма</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="filmNameLine"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="hallTypeLabel">
+         <property name="text">
+          <string>Тип кинозала (Большой, Средний, Малый)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="hallTypeLine"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="sessionTimeLabel">
+         <property name="text">
+          <string>Время сеанса</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="sessionTimeLine"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="ticketCostLabel">
+         <property name="text">
+          <string>Цена билета</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="ticketCostLine"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="addSessionButtion">
+         <property name="text">
+          <string>Добавить сеанс на афишу</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addSessionEventButton">
+       <property name="text">
+        <string>Добавить сеанс</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="delSessionLabel">
+         <property name="text">
+          <string>Введите id сеанса, который вы хотите удалить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLineEdit" name="session2DelIdLine"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="delSessionButton">
+           <property name="text">
+            <string>Удалить</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="delSessionEventButton">
+       <property name="text">
+        <string>Удалить сеанс</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="getStatLabel">
+         <property name="text">
+          <string>Введите id сеанса, статистику которого вы хотите увидеть</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="getStatLayout">
+         <item>
+          <widget class="QLineEdit" name="session2StatIdLine"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="getStatButton">
+           <property name="text">
+            <string>Получить статистику</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="getStatEventButton">
+       <property name="text">
+        <string>Увидеть статистику по сеансу</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="backToSessionsButton">
+       <property name="text">
+        <string>Обратно на афишу</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

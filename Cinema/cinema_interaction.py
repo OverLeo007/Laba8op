@@ -34,7 +34,8 @@ class Session:
 
     def get_stat(self):
         """Сводка по выручке за сеанс"""
-        return f'Выручка: {self.revenue} руб\n' \
+        return f'Сеанс: {self.film}\n' \
+               f'Выручка: {self.revenue} руб\n' \
                f'Продано билетов: {len(self.sold)}'
 
     def revenue_upd(self):
@@ -43,15 +44,17 @@ class Session:
 
     def get_places_info(self):
         """Парсинг и вывод мест в кинозале с учетом купленных билетов"""
+        red_color = '<span style="color:red";>'
+        green_color = '<span style="color:green";>'
         places, rows = list(map(int, self.hall.size))
         str_hall = []
         for row in range(1, rows + 1):
-            n_row = [f'ряд {str(row).ljust(2, " ")}']
+            n_row = [f'ряд {str(row) + ("&nbsp;&nbsp;&nbsp;" if len(str(row)) == 1 else "&nbsp;")}']
             for place in range(1, places + 1):
-                what_color = col.Fore.GREEN if (row, place) in map(
-                    lambda ticket: ticket.cords, self.available) else col.Fore.BLACK
-                n_row.append(what_color + str(place) + col.Style.RESET_ALL)
-            str_hall.append('  '.join(n_row) + f'  ряд {str(row)}')
+                what_color = green_color if (row, place) in map(
+                    lambda ticket: ticket.cords, self.available) else red_color
+                n_row.append(what_color + str(place) + '</span>')
+            str_hall.append('&nbsp;&nbsp;'.join(n_row) + f'&nbsp;&nbsp;ряд {str(row)}<br>')
         return '\n'.join(str_hall)
 
     def place_pick(self, place):
