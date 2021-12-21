@@ -35,11 +35,12 @@ class AdminTerminal(Terminal):
 
     def add_session(self, film, hall, time, cost):
         """Метод добавления нового сеанса на афишу"""
+        session = Session(Hall(hall), time, int(cost), film)
         if self.sessions.keys():
-            self.sessions.update({str(int(list(self.sessions.keys())[-1]) + 1):
-                                      Session(Hall(hall), time, cost, film)})
+            self.sessions.update({str(int(list(self.sessions.keys())[-1]) + 1): session})
         else:
-            self.sessions.update({0: Session(Hall(hall), time, cost, film)})
+            self.sessions.update({0: session})
+        return session
 
     def del_session(self, sid):
         """

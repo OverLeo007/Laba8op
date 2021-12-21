@@ -1,5 +1,6 @@
 import sys
 
+import re
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget
 from PyQt5 import QtGui
 
@@ -147,8 +148,16 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
 
     def reset(self):
         self.make_content()
-        hider(*self.to_show)
-        shower(*self.to_hide)
+        hider(self.addSessionButtion, self.filmNameLine,
+              self.filmNameLabel, self.hallTypeLine,
+              self.hallTypeLabel, self.sessionTimeLine,
+              self.sessionTimeLabel, self.ticketCostLine,
+              self.ticketCostLabel, self.delSessionLabel,
+              self.delSessionButton, self.session2DelIdLine,
+              self.getStatLabel, self.getStatButton,
+              self.session2StatIdLine, self.backToSessionsButton)
+        shower(self.addSessionEventButton, self.delSessionEventButton,
+               self.getStatEventButton, self.tableLable)
         cleaner(*self.to_clear)
 
     def get_statistics_event(self):
@@ -194,12 +203,51 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
         shower(*self.to_show)
 
     def add_session(self):
-        pass
+        film = self.filmNameLine.text()
+        hall = self.hallTypeLine.text()
+        time = self.sessionTimeLine.text()
+        cost = self.ticketCostLine.text()
+        errors = ''
+        if not bool(film):
+            errors += 'Ошибка: пустое название фильма\n'
+        if (hall := hall.lower().capitalize()) not in ('Большой', 'Средний', 'Малый'):
+            errors += 'Ошибка: некореектный тип зала\n'
+        if not re.fullmatch(r'\d{2}:\d{2}', time):
+            errors += 'Ошибка: неправильно задано время (корректный формат hh:mm)\n'
+        if not (bool(cost)):
+            errors += 'Ошибка: поле цены пустое\n'
+        if errors:
+            self.fail_add_session_event(errors)
+        else:
+            self.success_add_session_event(film, hall, time, cost)
+
+    def fail_add_session_event(self, errors):
+        self.to_hide = [self.addSessionButtion,
+                        self.filmNameLabel, self.filmNameLine,
+                        self.hallTypeLabel, self.hallTypeLine,
+                        self.sessionTimeLabel, self.sessionTimeLine,
+                        self.ticketCostLabel, self.ticketCostLine]
+        self.sessionsTextBrowser.setText(errors)
+        self.to_show = [self.sessionsTextBrowser]
+        hider(*self.to_hide)
+        shower(*self.to_show)
+
+    def success_add_session_event(self, film, hall, time, cost):
+        self.to_hide = [self.addSessionButtion,
+                        self.filmNameLabel, self.filmNameLine,
+                        self.hallTypeLabel, self.hallTypeLine,
+                        self.sessionTimeLabel, self.sessionTimeLine,
+                        self.ticketCostLabel, self.ticketCostLine]
+        self.to_show = [self.sessionsTextBrowser]
+        new_session = self.terminal.add_session(film, hall, time, cost)
+        self.sessionsTextBrowser.setText('Сеанс успешно добавлен!\n' + new_session.__str__())
+        hider(*self.to_hide)
+        shower(*self.to_show)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = TerminalAdmin()
+    ex = TerminalPick()
     ex.show()
     app.exec_()
     exit()
