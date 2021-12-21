@@ -1,1 +1,4 @@
 venv/**
+cinema_gui/__pycache__/**
+Cinema/__pycache__/**
+.idea/**
