@@ -49,6 +49,23 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="aboutButton">
+       <property name="text">
+        <string>О программе</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="aboutTextBrowser"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="backButton">
+       <property name="text">
+        <string>Назад к выбору терминала</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

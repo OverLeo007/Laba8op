@@ -1,7 +1,7 @@
 import sys
 
 import re
-from PyQt5.QtWidgets import QDialog, QApplication, QWidget
+from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMessageBox
 from PyQt5 import QtGui
 
 import Cinema.cinema_interaction
@@ -12,57 +12,107 @@ from Cinema.terminals import UserTerminal, AdminTerminal
 from Cinema.sessions_generator import generate_session
 
 
-class TerminalPick(QDialog, Ui_terminal_picker):
-    def __init__(self):
-        super().__init__()
-
-        with open('stylesheet_template_terminal_choicer.qss', 'r', encoding='utf-8') as style:
-            self.setStyleSheet(style.read())
-
-        self.setupUi(self)
-        self.user_terminal_button.clicked.connect(self.user_picked)
-        self.admin_terminal_button.clicked.connect(self.admin_picked)
-
-        self.user_term = TerminalUser()
-        self.admin_term = TerminalAdmin()
-
-    def user_picked(self):
-        self.hide()
-        self.user_term.show()
-
-    def admin_picked(self):
-        self.hide()
-        self.admin_term.show()
-
-
 def hider(*to_hide):
+    """
+    Функция, выполняющая скрытие объектов PyQt5, передеанных в to_hide
+    :param to_hide: list, объекты для скрытия
+    """
     for obj in to_hide:
         obj.hide()
 
 
 def shower(*to_show):
+    """
+    Функция, показывающая объекты PyQt5, передеанных в to_hide
+    :param to_hide: list, объекты для показа
+    """
     for obj in to_show:
         obj.show()
 
 
 def cleaner(*to_clear):
+    """
+    Функция, очищающая текст, внутри объектов PyQt5, переданных в to_clear
+    :param to_clear: Объекты для очистки
+    """
     for obj in to_clear:
         obj.clear()
 
 
+class TerminalPick(QDialog, Ui_terminal_picker):
+    """
+    Класс окна, предоставляющего возможность выбрать тип терминала и узнать о программе
+    """
+
+    def __init__(self):
+        super().__init__()
+
+        with open('stylesheet_template_terminal_choicer.qss', 'r', encoding='utf-8') as style:
+            self.setStyleSheet(style.read())
+        self.setupUi(self)
+        with open('about.html', 'r', encoding='utf-8') as about_text:
+            self.aboutTextBrowser.setText(about_text.read())
+
+        self.user_terminal_button.clicked.connect(self.user_picked)
+        self.admin_terminal_button.clicked.connect(self.admin_picked)
+        self.aboutButton.clicked.connect(self.about_picked)
+        self.backButton.clicked.connect(self.back_to_pick)
+
+        hider(self.aboutTextBrowser, self.backButton)
+
+        self.user_term = TerminalUser()
+        self.admin_term = TerminalAdmin()
+
+    def user_picked(self):
+        """Метод, отвечающий на сигнал user_terminal_button.clicked
+        Запускает терминал пользователя"""
+        self.hide()
+        self.user_term.show()
+
+    def admin_picked(self):
+        """Метод, отвечающий на сигнал admin_terminal_button.clicked
+        Запускает терминал администратора"""
+        self.hide()
+        self.admin_term.show()
+
+    def about_picked(self):
+        """Метод, отвечающий на сигнал aboutButton.clicked
+        Заменяет показываемые виджеты, для отображение текста о программе"""
+        to_hide = [self.term_pick_label, self.user_terminal_button,
+                   self.admin_terminal_button, self.aboutButton]
+        to_show = [self.aboutTextBrowser, self.backButton]
+        hider(*to_hide)
+        shower(*to_show)
+
+    def back_to_pick(self):
+        """Метод, отвечающий на сигнал backButton.clicked
+        Заменяет показываемые виджеты, для возврата к выбору терминала"""
+        to_hide = [self.aboutTextBrowser, self.backButton]
+        to_show = [self.term_pick_label, self.user_terminal_button,
+                   self.admin_terminal_button, self.aboutButton]
+        hider(*to_hide)
+        shower(*to_show)
+
+
 class TerminalUser(QWidget, Ui_UserTerminal):
+    """
+    Класс окна пользователя, поддерживает возможность покупки билетов
+    """
+
     def __init__(self):
         super().__init__()
 
         with open('stylesheet_template_terminal_choicer.qss', 'r', encoding='utf-8') as style:
             self.setStyleSheet(style.read())
         self.terminal = UserTerminal([generate_session(fill=True) for _ in range(10)])
+
         self.setupUi(self)
 
         self.sessionEdit.setValidator(QtGui.QIntValidator())
         self.placeEdit.setValidator(QtGui.QIntValidator())
 
-        hider(self.buyButton, self.placeEdit, self.placeLabel, self.yesButton, self.noButton, self.nextIterLabel)
+        hider(self.buyButton, self.placeEdit, self.placeLabel,
+              self.yesButton, self.noButton, self.nextIterLabel)
 
         self.toBuyButton.clicked.connect(self.buy_ticket_event)
         self.buyButton.clicked.connect(self.get_ticket)
@@ -72,17 +122,27 @@ class TerminalUser(QWidget, Ui_UserTerminal):
         self.make_content()
 
     def make_content(self):
+        """
+        Метод, размещающий в основном текстовом виджете информацию о текущих сеансах
+        """
         self.sessionsTextBrowser.setText(self.terminal.get_pretty_sessions())
 
     def reset(self):
+        """
+        Метод, сбрасывающий окно до исходного состояния
+        """
         self.make_content()
         hider(self.nextIterLabel, self.yesButton, self.noButton)
         shower(self.toBuyButton, self.sessionPickLabel, self.sessionEdit)
-        self.sessionPickLabel.setText('Ввведите id сеанса на который хотите купить билет')
+        self.sessionPickLabel.setText('Введите id сеанса на который хотите купить билет')
         self.sessionEdit.clear()
         self.placeEdit.clear()
 
     def buy_ticket_event(self):
+        """
+        Метод, отвечающий на сигнал toBuyButton.clicked,
+        Заменяет показываемые виджеты, отрывая интерфейс покупки билета
+        """
         if (session_id := self.sessionEdit.text()) not in self.terminal.sessions.keys():
             self.sessionEdit.setText('Сеанса с таким id не существует')
         else:
@@ -94,6 +154,12 @@ class TerminalUser(QWidget, Ui_UserTerminal):
             shower(self.buyButton, self.placeEdit, self.placeLabel)
 
     def get_ticket(self):
+        """
+        Метод, отвечающий на сигнал buyButton.clicked,
+        производит покупку выбранного билета и изменяет интерфейс,
+        для возможности выбора пользователем продолжения
+        покупки либо выхода из программы
+        """
         row = int(self.sessionEdit.text())
         place = int(self.placeEdit.text())
         ticket = self.terminal.buy_ticket((row, place))
@@ -101,11 +167,18 @@ class TerminalUser(QWidget, Ui_UserTerminal):
             self.sessionsTextBrowser.setText(ticket.__str__())
         else:
             self.sessionsTextBrowser.setText(ticket)
-        hider(self.placeEdit, self.placeLabel, self.sessionEdit, self.sessionPickLabel, self.buyButton)
+        hider(self.placeEdit, self.placeLabel,
+              self.sessionEdit, self.sessionPickLabel,
+              self.buyButton)
         shower(self.nextIterLabel, self.yesButton, self.noButton)
 
 
 class TerminalAdmin(QWidget, Ui_AdminTerminal):
+    """
+    Класс окна администратора, поддерживает возможность
+    редактирования текущих сеансов, а также вывод статистики по сеансу
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -144,9 +217,15 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
         self.make_content()
 
     def make_content(self):
+        """
+        Метод, размещающий в основном текстовом виджете информацию о текущих сеансах
+        """
         self.sessionsTextBrowser.setText(self.terminal.get_pretty_sessions())
 
     def reset(self):
+        """
+        Метод, сбрасывающий окно до исходного состояния
+        """
         self.make_content()
         hider(self.addSessionButtion, self.filmNameLine,
               self.filmNameLabel, self.hallTypeLine,
@@ -161,6 +240,10 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
         cleaner(*self.to_clear)
 
     def get_statistics_event(self):
+        """
+        Метод, отвечающий на сигнал getStatEventButton.clicked,
+        изменяет главное окно, для отображения статистики
+        """
         self.to_hide = [self.addSessionEventButton, self.delSessionEventButton,
                         self.getStatEventButton, self.tableLable]
         self.to_show = [self.getStatLabel, self.getStatButton,
@@ -169,12 +252,20 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
         shower(*self.to_show)
 
     def get_statistics(self):
+        """
+        Метод, отвечающий на сигнал getStatButton.clicked,
+        отображает статистику по выбранному сеансу
+        """
         if (session_id := self.session2StatIdLine.text()) not in self.terminal.sessions.keys():
             self.session2StatIdLine.setText('Сеанса с таким id не существует')
         else:
             self.sessionsTextBrowser.setText(self.terminal.session_pick(session_id)['session'].get_stat())
 
     def delete_session_event(self):
+        """
+        Метод, отвечающий на сигнал delSessionEventButton.clicked,
+        изменяет главное окно, для запроса ввода id удаляемого сеанса
+        """
         self.to_hide = [self.addSessionEventButton, self.delSessionEventButton,
                         self.getStatEventButton, self.tableLable]
         self.to_show = [self.delSessionLabel, self.delSessionButton,
@@ -183,6 +274,10 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
         shower(*self.to_show)
 
     def delete_session(self):
+        """
+        Метод, отвечающий на сигнал delSessionButton.clicked,
+        удаляет сеанс с выбранным id
+        """
         if (session_id := self.session2DelIdLine.text()) not in self.terminal.sessions.keys():
             self.session2DelIdLine.setText('Сеанса с таким id не существует')
         else:
@@ -191,6 +286,10 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
                                              f'успешно удален')
 
     def add_session_event(self):
+        """
+        Метод, отвечающий на сигнал addSessionEventButton.clicked,
+        изменяет главное окно, для запроса ввода данных нового сеанса
+        """
         self.to_hide = [self.addSessionEventButton, self.delSessionEventButton,
                         self.getStatEventButton, self.tableLable,
                         self.sessionsTextBrowser]
@@ -203,6 +302,10 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
         shower(*self.to_show)
 
     def add_session(self):
+        """
+        Метод, отвечающий на сигнал addSessionButtion.clicked,
+        Пытается добавить сеанс с введенными данными
+        """
         film = self.filmNameLine.text()
         hall = self.hallTypeLine.text()
         time = self.sessionTimeLine.text()
@@ -222,6 +325,10 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
             self.success_add_session_event(film, hall, time, cost)
 
     def fail_add_session_event(self, errors):
+        """
+        Метод, вызываемый если добавление сессии с текущими данными невозможно,
+        выводит ошибки в данных и предлагает вернуть окно к исходному состоянию
+        """
         self.to_hide = [self.addSessionButtion,
                         self.filmNameLabel, self.filmNameLine,
                         self.hallTypeLabel, self.hallTypeLine,
@@ -233,6 +340,11 @@ class TerminalAdmin(QWidget, Ui_AdminTerminal):
         shower(*self.to_show)
 
     def success_add_session_event(self, film, hall, time, cost):
+        """
+        Метод, вызываемый если добавление сессии завершилось успешно,
+        выводит сообщение об успешном добавлении
+        и предлагает вернуть окно к исходному состоянию
+        """
         self.to_hide = [self.addSessionButtion,
                         self.filmNameLabel, self.filmNameLine,
                         self.hallTypeLabel, self.hallTypeLine,

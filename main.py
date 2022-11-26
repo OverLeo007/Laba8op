@@ -1,4 +1,4 @@
-from Cinema.terminals import UserTerminal, AdminTerminal, ExtendedTerminal
+from Cinema.terminals import UserTerminal, AdminTerminal
 from Cinema.sessions_generator import generate_session
 
 
@@ -22,7 +22,7 @@ def main():
     while True:
         print('\n'.join(map(lambda x: f'{x[0]} - {x[1]}', terminal.menu.items())))
         try:
-            print(terminal.menu_picker('1'))
+            print(terminal.menu('1'))
             break
         except ValueError as e:
             print(e.args[0])
